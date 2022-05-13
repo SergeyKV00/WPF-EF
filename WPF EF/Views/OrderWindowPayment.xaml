@@ -1,0 +1,45 @@
+﻿<Window x:Class="WPF_EF.Views.OrderWindowPayment"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_EF.Views"
+        mc:Ignorable="d"
+        Title="OrderWindowPayment" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0">
+            <TextBlock Text="Заказ:" FontSize="20" />
+            <ListView ItemsSource="{Binding SelectedOrderL}">
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Id}">Номер</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Sum}">Сумма</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Date}">Дата</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=SumPay}">Сумма оплаты</GridViewColumn>
+                </GridView>
+            </ListView>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <TextBlock Text="Выберите аванс для оплаты" FontSize="20" />
+            <ListView ItemsSource="{Binding MoneyIncomes}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Id}">Номер</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Sum}">Сумма</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Date}">Дата</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Remainder}">Остаток</GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+        <Button Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Content="Оплатить"
+                />
+    </Grid>
+</Window>

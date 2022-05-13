@@ -21,7 +21,8 @@
         <!--#region Orders -->
         <DockPanel Grid.Column="0" Grid.Row="0">
             <Label DockPanel.Dock="Top" Content="Заказы" HorizontalAlignment="Center" FontSize="16"/>
-            <ListView ItemsSource="{Binding Orders}" Name="ordersList" VerticalAlignment="Stretch">
+            <ListView ItemsSource="{Binding Orders}" SelectedItem="{Binding SelectedOrder}" 
+                      x:Name="viewAllOrders" VerticalAlignment="Stretch">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Id}">Номер</GridViewColumn>
@@ -30,9 +31,6 @@
                         <GridViewColumn DisplayMemberBinding="{Binding Path=SumPay}">Сумма оплаты</GridViewColumn>
                     </GridView>
                 </ListView.View>
-                <ListView.Resources>
-
-                </ListView.Resources>
             </ListView>
         </DockPanel>
         <Grid Grid.Column="0" Grid.Row="1">
@@ -40,33 +38,30 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="Add" Command="{Binding OpenAddNewOrderWindow}"/>
-            <Button Grid.Column="1" Content="Pay" Command="{Binding}"/>
+            <Button Grid.Column="0" Content="Добавить заказ" Command="{Binding OpenAddNewOrderWindow}"/>
+            <Button Grid.Column="1" Content="Оплатить заказ" Command="{Binding OpenOrderWindowPayment}"/>
         </Grid>
         <!--#endregion-->
         
         <!--#region MoneyIncome-->
         <DockPanel Grid.Column="1" Grid.Row="0">
             <Label DockPanel.Dock="Top" Content="Авансы" HorizontalAlignment="Center" FontSize="16"/>
-            <ListView ItemsSource="{Binding MoneyIncomes}" Name="moneyIncomesList" VerticalAlignment="Stretch">
+            <ListView ItemsSource="{Binding MoneyIncomes}" Name="viewAllMoneyIncomes" VerticalAlignment="Stretch">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn>Номер</GridViewColumn>
-                        <GridViewColumn>Сумма</GridViewColumn>
-                        <GridViewColumn>Дата</GridViewColumn>
-                        <GridViewColumn>Сумма оплаты</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Id}">Номер</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Sum}">Сумма</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Date}">Дата</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Remainder}">Остаток</GridViewColumn>
                     </GridView>
                 </ListView.View>
-                <ListView.Resources>
-
-                </ListView.Resources>
             </ListView>
         </DockPanel>
         <Grid Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="Add" Command="{Binding OpenAddNeMoneyIncomeWindow}"/>
+            <Button Grid.Column="0" Content="Добавить аванс" Command="{Binding OpenAddNeMoneyIncomeWindow}"/>
         </Grid>
         <!--#endregion-->
     </Grid>

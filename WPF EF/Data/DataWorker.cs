@@ -19,11 +19,11 @@ namespace WPF_EF.Models
         }
 
         // Create a money income
-        public static void CreateMoneyIncome(decimal sum)
+        public static void CreateMoneyIncome(decimal sum, DateTime date)
         {
             using (AppDbContext db = new AppDbContext())
             {
-                MoneyIncome moneyIncome = new MoneyIncome { Sum = sum, Remainder = sum, Date = DateTime.Now };
+                MoneyIncome moneyIncome = new MoneyIncome { Sum = sum, Remainder = sum, Date = date};
                 db.Incomes.Add(moneyIncome);
                 db.SaveChanges();
             }

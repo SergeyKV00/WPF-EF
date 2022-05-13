@@ -36,10 +36,8 @@ namespace WPF_EF.ViewModels
             }
         }
 
-        // Property
-        public string OrderSum { get; set; }
-
         // Add new order
+        public string OrderSum { get; set; }
         private RelayCommand addNewOrder;
         public RelayCommand AddNewOrder
         {
@@ -47,18 +45,63 @@ namespace WPF_EF.ViewModels
             {
                 return addNewOrder ?? new RelayCommand(obj =>
                 {
-                    Window? window = obj as Window;
+                    Window window = obj as Window;
                     decimal sum;
                     if(!decimal.TryParse(OrderSum, out sum))
                     {
-                        SetRedBlockControll(window, "SumBlock");
+                        SetRedBlockControll(window, "orderSumBlock");
                     }
                     else
                     {
                         DataWorker.CreateOrder(sum);
+                        UpdateAllOrdersView();
+                        SetNullValuesProperty();
+                        window.Close();
                     }                   
                 });
             }
+        }
+
+        // Add new money income
+        public string MoneyIncomeSum { get; set; }
+        private DateTime dateTime = DateTime.Now;
+        public DateTime MoneyIncomeDate { get => dateTime; set => dateTime = value; }
+        private RelayCommand addNewMoneyIncome;
+        public RelayCommand AddNewMoneyIncome
+        {
+            get
+            {
+                return addNewMoneyIncome ?? new RelayCommand(obj =>
+                {
+                    Window window = obj as Window;
+                    decimal sum;
+                    if(!decimal.TryParse(MoneyIncomeSum, out sum))
+                    {
+                        SetRedBlockControll(window, "moneyIncomeSumBlock");
+                    }
+                    else
+                    {
+                        DataWorker.CreateMoneyIncome(sum, MoneyIncomeDate);
+                        UpdateAllMoneyIncomesView();
+                        SetNullValuesProperty();
+                        window.Close();
+                    }
+                    
+                });
+            }
+        }
+
+        // Pay order
+        private Order selectedOrder;
+        public Order SelectedOrder
+        {
+            get { return selectedOrder; }
+            set
+            {
+                selectedOrder = value;
+                OnPropertyChanged();
+            }
+
         }
 
         #region Windows opening commands 
@@ -90,6 +133,20 @@ namespace WPF_EF.ViewModels
                 });
             }
         }
+
+        // Open order window payment
+        private RelayCommand? openOrderWindowPayment;
+        public RelayCommand OpenOrderWindowPayment
+        {
+            get
+            {
+                return openOrderWindowPayment ?? new RelayCommand(obj =>
+                {
+                    OrderWindowPayment window = new OrderWindowPayment();
+                    OpenDialogWindow(window);
+                });
+            }
+        }
         #endregion
 
         // Open new dialog window 
@@ -97,13 +154,43 @@ namespace WPF_EF.ViewModels
         {
             window.Owner = App.Current.MainWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            window.ShowDialog();
+            window.ShowDialog(); 
+        }
+
+        private void UpdateAllDataView()
+        {
+            UpdateAllOrdersView();
+            UpdateAllMoneyIncomesView();
+        }
+
+        private void UpdateAllOrdersView()
+        {
+            Orders = DataWorker.GetAllOrders();
+            MainWindow.AllOrdersView.ItemsSource = null;
+            MainWindow.AllOrdersView.Items.Clear();
+            MainWindow.AllOrdersView.ItemsSource = Orders;
+            MainWindow.AllOrdersView.Items.Refresh();        
+        }
+
+        private void UpdateAllMoneyIncomesView()
+        {
+            MoneyIncomes = DataWorker.GetAllIncomes();
+            MainWindow.AllMoneyIncomesView.ItemsSource = null;
+            MainWindow.AllMoneyIncomesView.Items.Clear();
+            MainWindow.AllMoneyIncomesView.ItemsSource = MoneyIncomes;
+            MainWindow.AllMoneyIncomesView.Items.Refresh();
         }
 
         private void SetRedBlockControll(Window? window, string blockName)
         {
             Control block = window.FindName(blockName) as Control;
             block.BorderBrush = Brushes.Red;
+        }
+
+        private void SetNullValuesProperty()
+        {
+            OrderSum = null;
+            MoneyIncomeSum = null;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
