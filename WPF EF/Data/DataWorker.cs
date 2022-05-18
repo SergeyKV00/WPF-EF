@@ -6,8 +6,7 @@ using System.Linq;
 namespace WPF_EF.Models
 {
     public static class DataWorker
-    {
-        // Create an order
+    { 
         public static void CreateOrder(decimal sum)
         {
             using (AppDbContext db = new AppDbContext())
@@ -18,7 +17,6 @@ namespace WPF_EF.Models
             }
         }
 
-        // Create a money income
         public static void CreateMoneyIncome(decimal sum, DateTime date)
         {
             using (AppDbContext db = new AppDbContext())
@@ -29,7 +27,16 @@ namespace WPF_EF.Models
             }
         }
 
-        // Get orders
+        public static void OrderPayment(decimal sum, MoneyIncome moneyIncome, Order order)
+        {
+            using(AppDbContext db = new AppDbContext())
+            {
+                Transaction transaction = new Transaction { Income = moneyIncome, Order = order, Sum = sum };
+                db.Transactions.Add(transaction);
+                db.SaveChanges();
+            }    
+        }
+
         public static List<Order> GetAllOrders()
         {
             List<Order> result;
@@ -40,7 +47,6 @@ namespace WPF_EF.Models
             return result;
         }
 
-        // Get money incomes 
         public static List<MoneyIncome> GetAllIncomes()
         {
             List<MoneyIncome> result;

@@ -47,7 +47,7 @@ namespace WPF_EF.ViewModels
                 {
                     Window window = obj as Window;
                     decimal sum;
-                    if(!decimal.TryParse(OrderSum, out sum))
+                    if (!decimal.TryParse(OrderSum, out sum))
                     {
                         SetRedBlockControll(window, "orderSumBlock");
                     }
@@ -57,7 +57,7 @@ namespace WPF_EF.ViewModels
                         UpdateAllOrdersView();
                         SetNullValuesProperty();
                         window.Close();
-                    }                   
+                    }
                 });
             }
         }
@@ -75,7 +75,7 @@ namespace WPF_EF.ViewModels
                 {
                     Window window = obj as Window;
                     decimal sum;
-                    if(!decimal.TryParse(MoneyIncomeSum, out sum))
+                    if (!decimal.TryParse(MoneyIncomeSum, out sum))
                     {
                         SetRedBlockControll(window, "moneyIncomeSumBlock");
                     }
@@ -86,12 +86,12 @@ namespace WPF_EF.ViewModels
                         SetNullValuesProperty();
                         window.Close();
                     }
-                    
+
                 });
             }
         }
 
-        // Pay order
+        // Select order
         private Order selectedOrder;
         public Order SelectedOrder
         {
@@ -102,6 +102,18 @@ namespace WPF_EF.ViewModels
                 OnPropertyChanged();
             }
 
+        }
+
+        // Select MoneyIncome
+        private MoneyIncome selectedMoneyIncome;
+        public MoneyIncome SelectedMoneyIncome
+        {
+            get { return selectedMoneyIncome; }
+            set
+            {
+                selectedMoneyIncome = value;
+                OnPropertyChanged();
+            }
         }
 
         #region Windows opening commands 
@@ -142,20 +154,50 @@ namespace WPF_EF.ViewModels
             {
                 return openOrderWindowPayment ?? new RelayCommand(obj =>
                 {
-                    OrderWindowPayment window = new OrderWindowPayment();
-                    OpenDialogWindow(window);
+                    if (SelectedOrder != null)
+                    {
+                        OrderWindowPayment window = new OrderWindowPayment();
+                        OpenDialogWindow(window);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Выберите заказ!");
+                    }
+
                 });
             }
         }
-        #endregion
+
+        // Order payment
+        public string AmountPayment { get; set; }
+        private RelayCommand? orderPayment;
+        public RelayCommand OrderPayment
+        {
+            get
+            {
+                return orderPayment ?? new RelayCommand(obj =>
+                {
+                    decimal paymentSum;
+                    if (SelectedOrder != null && SelectedMoneyIncome != null)
+                    {
+                        MessageBox.Show($"Оплата! Номер заказа: {SelectedOrder.Id}, Номер аванса: {SelectedMoneyIncome.Id}, Cумма оплаты: {AmountPayment}");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error");
+                    }
+                });
+            }
+        }
 
         // Open new dialog window 
         private void OpenDialogWindow(Window window)
         {
             window.Owner = App.Current.MainWindow;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            window.ShowDialog(); 
+            window.ShowDialog();
         }
+        #endregion
 
         private void UpdateAllDataView()
         {
@@ -169,7 +211,7 @@ namespace WPF_EF.ViewModels
             MainWindow.AllOrdersView.ItemsSource = null;
             MainWindow.AllOrdersView.Items.Clear();
             MainWindow.AllOrdersView.ItemsSource = Orders;
-            MainWindow.AllOrdersView.Items.Refresh();        
+            MainWindow.AllOrdersView.Items.Refresh();
         }
 
         private void UpdateAllMoneyIncomesView()

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_EF.Views"
         mc:Ignorable="d"
-        Title="OrderWindowPayment" Height="450" Width="800">
+        Title="OrderWindowPayment" Height="450" Width="600">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -17,18 +17,30 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="0">
             <TextBlock Text="Заказ:" FontSize="20" />
-            <ListView ItemsSource="{Binding SelectedOrderL}">
-                <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Id}">Номер</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Sum}">Сумма</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Date}">Дата</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=SumPay}">Сумма оплаты</GridViewColumn>
-                </GridView>
-            </ListView>
+            <Grid DataContext="{Binding SelectedOrder}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Id" FontSize="14" Grid.Column="0" Grid.Row="0"/>
+                <TextBlock Text="{Binding Id}" FontSize="14" Grid.Column="1" Grid.Row="0"/>
+                <TextBlock Text="Date" FontSize="14" Grid.Column="0" Grid.Row="1"/>
+                <TextBlock Text="{Binding Date}" FontSize="14" Grid.Column="1" Grid.Row="1"/>
+                <TextBlock Text="Sum" FontSize="14" Grid.Column="0" Grid.Row="2"/>
+                <TextBlock Text="{Binding Sum}" FontSize="14" Grid.Column="1" Grid.Row="2"/>
+                <TextBlock Text="SumPay" FontSize="14" Grid.Column="0" Grid.Row="3"/>
+                <TextBlock Text="{Binding SumPay}" FontSize="14" Grid.Column="1" Grid.Row="3"/>
+            </Grid>
         </StackPanel>
         <StackPanel Grid.Column="1">
             <TextBlock Text="Выберите аванс для оплаты" FontSize="20" />
-            <ListView ItemsSource="{Binding MoneyIncomes}">
+            <ListView Height="250" ItemsSource="{Binding MoneyIncomes}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Id}">Номер</GridViewColumn>
@@ -38,6 +50,8 @@
                     </GridView>
                 </ListView.View>
             </ListView>
+            <TextBlock Text="Сумма к оплате:" FontSize="20"/>
+            <TextBox Height="30px"/>
         </StackPanel>
         <Button Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Content="Оплатить"
                 />

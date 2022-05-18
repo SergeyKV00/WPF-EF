@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_EF.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="720" Width="1280">
     <Window.Resources>
     </Window.Resources>
     <Grid>
@@ -14,9 +14,10 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="0.5*"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="0.4*" />
+            <RowDefinition Height="0.25*" />
+            <RowDefinition Height="0.25*" />
         </Grid.RowDefinitions>
         <!--#region Orders -->
         <DockPanel Grid.Column="0" Grid.Row="0">
@@ -39,14 +40,15 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Content="Добавить заказ" Command="{Binding OpenAddNewOrderWindow}"/>
-            <Button Grid.Column="1" Content="Оплатить заказ" Command="{Binding OpenOrderWindowPayment}"/>
+            <Button Grid.Column="1" Content="Оплатить заказ" Command="{Binding OrderPayment}"/>
         </Grid>
         <!--#endregion-->
         
         <!--#region MoneyIncome-->
         <DockPanel Grid.Column="1" Grid.Row="0">
             <Label DockPanel.Dock="Top" Content="Авансы" HorizontalAlignment="Center" FontSize="16"/>
-            <ListView ItemsSource="{Binding MoneyIncomes}" Name="viewAllMoneyIncomes" VerticalAlignment="Stretch">
+            <ListView ItemsSource="{Binding MoneyIncomes}" SelectedItem="{Binding SelectedMoneyIncome}"
+                      x:Name="viewAllMoneyIncomes" VerticalAlignment="Stretch">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Id}">Номер</GridViewColumn>
@@ -64,5 +66,52 @@
             <Button Grid.Column="0" Content="Добавить аванс" Command="{Binding OpenAddNeMoneyIncomeWindow}"/>
         </Grid>
         <!--#endregion-->
+        <Grid DataContext="{Binding SelectedOrder}" Grid.Row="2 " Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Заказ:" FontSize="20" Grid.Column="0" Grid.Row="0"/>
+            <TextBlock Text="Id" FontSize="14" Grid.Column="0" Grid.Row="1"/>
+            <TextBlock Text="{Binding Id}" FontSize="14" Grid.Column="1" Grid.Row="1"/>
+            <TextBlock Text="Date" FontSize="14" Grid.Column="0" Grid.Row="2"/>
+            <TextBlock Text="{Binding Date}" FontSize="14" Grid.Column="1" Grid.Row="2"/>
+            <TextBlock Text="Sum" FontSize="14" Grid.Column="0" Grid.Row="3"/>
+            <TextBlock Text="{Binding Sum}" FontSize="14" Grid.Column="1" Grid.Row="3"/>
+            <TextBlock Text="SumPay" FontSize="14" Grid.Column="0" Grid.Row="4"/>
+            <TextBlock Text="{Binding SumPay}" FontSize="14" Grid.Column="1" Grid.Row="4"/>
+            <TextBlock Text="Сумма к оплате:" FontSize="18" Grid.Column="0" Grid.Row="5" Margin="0 10 0 0"/>
+            <TextBox Text="{Binding AmountPayment}" FontSize="18" Grid.Column="1" Grid.Row="5" Margin="0 10 0 0"/>
+        </Grid>
+        <Grid DataContext="{Binding SelectedMoneyIncome}" Grid.Row="3" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Аванс:" FontSize="20" Grid.Column="0" Grid.Row="0"/>
+            <TextBlock Text="Id" FontSize="14" Grid.Column="0" Grid.Row="1"/>
+            <TextBlock Text="{Binding Id}" FontSize="14" Grid.Column="1" Grid.Row="1"/>
+            <TextBlock Text="Date" FontSize="14" Grid.Column="0" Grid.Row="2"/>
+            <TextBlock Text="{Binding Date}" FontSize="14" Grid.Column="1" Grid.Row="2"/>
+            <TextBlock Text="Sum" FontSize="14" Grid.Column="0" Grid.Row="3"/>
+            <TextBlock Text="{Binding Sum}" FontSize="14" Grid.Column="1" Grid.Row="3"/>
+            <TextBlock Text="SumPay" FontSize="14" Grid.Column="0" Grid.Row="4"/>
+            <TextBlock Text="{Binding Remainder}" FontSize="14" Grid.Column="1" Grid.Row="4"/>
+        </Grid>
     </Grid>
 </Window>
