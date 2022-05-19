@@ -7,12 +7,12 @@ using WPF_EF.Views;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Linq;
 
 namespace WPF_EF.ViewModels
 {
     public class AppViewModel : INotifyPropertyChanged
     {
-        // Orders
         private List<Order> orders = DataWorker.GetAllOrders();
         public List<Order> Orders
         {
@@ -24,7 +24,6 @@ namespace WPF_EF.ViewModels
             }
         }
 
-        // Money Incomes
         private List<MoneyIncome> moneyIncomes = DataWorker.GetAllIncomes();
         public List<MoneyIncome> MoneyIncomes
         {
@@ -33,6 +32,17 @@ namespace WPF_EF.ViewModels
             {
                 moneyIncomes = value;
                 OnPropertyChanged("MoneyIncomes");
+            }
+        }
+
+        private List<Transaction> transactions = DataWorker.GetAllTransactions();
+        public List<Transaction> Transactions
+        {
+            get { return transactions; }
+            set
+            {
+                transactions = value;
+                OnPropertyChanged("Transactions");
             }
         }
 
@@ -81,12 +91,11 @@ namespace WPF_EF.ViewModels
                     }
                     else
                     {
-                        DataWorker.CreateMoneyIncome(sum, MoneyIncomeDate);
+                        DataWorker.CreateMoneyIncome(sum);
                         UpdateAllMoneyIncomesView();
                         SetNullValuesProperty();
                         window.Close();
                     }
-
                 });
             }
         }
@@ -99,9 +108,8 @@ namespace WPF_EF.ViewModels
             set
             {
                 selectedOrder = value;
-                OnPropertyChanged();
+                OnPropertyChanged("SelectedOrder");
             }
-
         }
 
         // Select MoneyIncome
@@ -112,7 +120,7 @@ namespace WPF_EF.ViewModels
             set
             {
                 selectedMoneyIncome = value;
-                OnPropertyChanged();
+                OnPropertyChanged("SelectedMoneyIncome");
             }
         }
 
@@ -163,7 +171,6 @@ namespace WPF_EF.ViewModels
                     {
                         MessageBox.Show("Выберите заказ!");
                     }
-
                 });
             }
         }
@@ -178,13 +185,15 @@ namespace WPF_EF.ViewModels
                 return orderPayment ?? new RelayCommand(obj =>
                 {
                     decimal paymentSum;
-                    if (SelectedOrder != null && SelectedMoneyIncome != null)
+                    if (SelectedOrder != null && SelectedMoneyIncome != null && decimal.TryParse(AmountPayment, out paymentSum))
                     {
-                        MessageBox.Show($"Оплата! Номер заказа: {SelectedOrder.Id}, Номер аванса: {SelectedMoneyIncome.Id}, Cумма оплаты: {AmountPayment}");
+                        DataWorker.OrderPayment(paymentSum, SelectedMoneyIncome, SelectedOrder);
+                        UpdateAllDataView();
                     }
                     else
                     {
-                        MessageBox.Show("Error");
+                        MessageBox.Show("Укажите заказ и аванс с которого хотите совершить оплату.\nА также укажите сумму платежа",
+                            "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                 });
             }
@@ -203,24 +212,32 @@ namespace WPF_EF.ViewModels
         {
             UpdateAllOrdersView();
             UpdateAllMoneyIncomesView();
+            UpdateAllTransactionsView();
         }
 
         private void UpdateAllOrdersView()
         {
             Orders = DataWorker.GetAllOrders();
-            MainWindow.AllOrdersView.ItemsSource = null;
-            MainWindow.AllOrdersView.Items.Clear();
-            MainWindow.AllOrdersView.ItemsSource = Orders;
-            MainWindow.AllOrdersView.Items.Refresh();
+            UpdateView(MainWindow.AllOrdersView, Orders);
         }
 
         private void UpdateAllMoneyIncomesView()
         {
             MoneyIncomes = DataWorker.GetAllIncomes();
-            MainWindow.AllMoneyIncomesView.ItemsSource = null;
-            MainWindow.AllMoneyIncomesView.Items.Clear();
-            MainWindow.AllMoneyIncomesView.ItemsSource = MoneyIncomes;
-            MainWindow.AllMoneyIncomesView.Items.Refresh();
+            UpdateView(MainWindow.AllMoneyIncomesView, MoneyIncomes);
+        }
+
+        private void UpdateAllTransactionsView()
+        {
+            Transactions = DataWorker.GetAllTransactions();
+            UpdateView(MainWindow.AllTransactionView, transactions);
+        }
+        private void UpdateView<T>(ListView listView, List<T> list)
+        {
+            listView.ItemsSource = null;
+            listView.Items.Clear();
+            listView.ItemsSource = list;
+            listView.Items.Refresh();
         }
 
         private void SetRedBlockControll(Window? window, string blockName)
@@ -236,7 +253,6 @@ namespace WPF_EF.ViewModels
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-
         public void OnPropertyChanged(string prop = "")
         {
             if (PropertyChanged != null)

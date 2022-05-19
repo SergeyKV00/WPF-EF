@@ -18,8 +18,6 @@
                     VerticalAlignment="Center">
             <TextBlock Text="Сумма:"/>
             <TextBox Name="moneyIncomeSumBlock" Text="{Binding MoneyIncomeSum}"/>
-            <TextBlock Text="Дата:"/>
-            <DatePicker IsTodayHighlighted="True" SelectedDate="{Binding MoneyIncomeDate}"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Margin="10" MinWidth="150" Content="Добавить" Command="{Binding AddNewMoneyIncome}"

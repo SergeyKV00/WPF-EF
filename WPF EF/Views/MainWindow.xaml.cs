@@ -19,6 +19,7 @@ namespace WPF_EF.Views
 
             AllOrdersView = viewAllOrders;
             AllMoneyIncomesView = viewAllMoneyIncomes;
+            AllTransactionView = viewAllTransactions;
         }
     }
 }
