@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WPF_EF.Models
 {
@@ -8,6 +9,7 @@ namespace WPF_EF.Models
 
         public DateTime Date { get; set; }
 
+        [ConcurrencyCheck]
         public decimal Sum { get; set; }
 
         public decimal Remainder { get; set; }

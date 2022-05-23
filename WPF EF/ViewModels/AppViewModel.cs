@@ -185,7 +185,8 @@ namespace WPF_EF.ViewModels
                 return orderPayment ?? new RelayCommand(obj =>
                 {
                     decimal paymentSum;
-                    if (SelectedOrder != null && SelectedMoneyIncome != null && decimal.TryParse(AmountPayment, out paymentSum))
+                    if (SelectedOrder != null && SelectedMoneyIncome != null && 
+                    decimal.TryParse(AmountPayment, out paymentSum) && paymentSum > 0)
                     {
                         DataWorker.OrderPayment(paymentSum, SelectedMoneyIncome, SelectedOrder);
                         UpdateAllDataView();

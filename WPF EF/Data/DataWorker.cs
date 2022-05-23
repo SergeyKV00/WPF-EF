@@ -41,8 +41,13 @@ namespace WPF_EF.Models
                 {
                     db.Transactions.Add(transaction);
                     db.SaveChanges();
+
                     MessageBox.Show($"Номер заказа: {order.Id}\nСумма платежа: {sum}", "Платеж завершен", 
                         MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    MessageBox.Show("Данные были изменены", "Платеж невозможен", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 catch (DbUpdateException ex)
                 {
