@@ -209,7 +209,7 @@ namespace WPF_EF.ViewModels
         }
         #endregion
 
-        private void UpdateAllDataView()
+        public void UpdateAllDataView()
         {
             UpdateAllOrdersView();
             UpdateAllMoneyIncomesView();

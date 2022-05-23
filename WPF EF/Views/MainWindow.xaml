@@ -122,8 +122,8 @@
             <TextBlock Text="Остаток" FontSize="14" Grid.Column="0" Grid.Row="4"/>
             <TextBlock Text="{Binding Remainder}" FontSize="14" Grid.Column="1" Grid.Row="4"/>
         </Grid>
-        <StackPanel Grid.Column="1" Grid.Row="2" Grid.RowSpan="2">
-            <Label Content="Платежи" HorizontalAlignment="Center" FontSize="16" />
+        <DockPanel Grid.Column="1" Grid.Row="2" Grid.RowSpan="2">
+            <Label DockPanel.Dock="Top" Content="Платежи" HorizontalAlignment="Center" FontSize="16" />
             <ListView ItemsSource="{Binding Transactions}" x:Name="viewAllTransactions"
                      HorizontalAlignment="Stretch">
                 <ListView.View>
@@ -135,6 +135,6 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-        </StackPanel>
+        </DockPanel>
     </Grid>
 </Window>
